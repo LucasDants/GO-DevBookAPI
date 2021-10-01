@@ -16,18 +16,18 @@ func NewPublicationsRepository(db *sql.DB) *publications {
 func (repository publications) Create(publication models.Publications) (uint64, error) {
 	statement, err := repository.db.Prepare("insert into publications (title, content, author_id) values (?, ?, ?)")
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	defer statement.Close()
 
 	result, err := statement.Exec(publication.Title, publication.Content, publication.AuthorID)
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	lastInsertID, err := result.LastInsertId()
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	return uint64(lastInsertID), nil
